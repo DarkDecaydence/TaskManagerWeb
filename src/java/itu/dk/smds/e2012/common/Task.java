@@ -22,4 +22,14 @@ public class Task {
     
     public String description;
     public String attendant;
+    
+    public Task(String id, String name, String date, String status,
+            String description, String attendant){
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.status = status;
+        this.description = description;
+        this.attendant = attendant;
+    }
 }

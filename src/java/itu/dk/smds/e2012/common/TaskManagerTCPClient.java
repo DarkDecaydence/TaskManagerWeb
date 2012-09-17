@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  *
@@ -23,12 +24,23 @@ public class TaskManagerTCPClient {
             int serverPort = 7896;
             
             Socket socket = new Socket(serverAddress, serverPort);
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            String[][] u = new String[][]{{"Alexander Kirk","goblin123"},
+                {"Mikkel Stolborg","demon123"},{"Niklas Madsen","orc123"}};
+            for(String[] a : u){
+                boolean serverState = checkServer(socket);
+                if (serverState == false) 
+                    { throw new IOException("No server response"); }
+                String request = new String("NewUser,"+a[0]+","+a[1]);
+                
+                dos.writeUTF(request);
+                
+                dos.flush();
+            }
+
             
-            boolean serverState = checkServer(socket);
-            if (serverState == false) 
-                { throw new IOException("No server response"); }
             
-            // Insert responses here --
+            //Create users:
             
             socket.close();
             
