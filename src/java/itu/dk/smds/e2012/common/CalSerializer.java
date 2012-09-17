@@ -25,7 +25,7 @@ public class CalSerializer {
     public static void main(String args[]) throws IOException {
         try {
 
-            // assign path to the university Xml, 
+            // assign path to the task-manager-xml Xml, 
             String path = System.getProperty("user.dir") + "/web/WEB-INF/task-manager-xml.xml";
 
             // create an instance context class, to serialize/deserialize.
