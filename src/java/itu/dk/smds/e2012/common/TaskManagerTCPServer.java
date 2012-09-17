@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  *
  * @author Alexander
  */
-public class TcpServer {
+public class TaskManagerTCPServer {
 
     /**
      * @param args the command line arguments
@@ -43,7 +43,7 @@ public class TcpServer {
             socket.close();
             
         } catch (IOException e) {
-            Logger.getLogger(TcpServer.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("error message: " + e.getMessage());
         }
     }
