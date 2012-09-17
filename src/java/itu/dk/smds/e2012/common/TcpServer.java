@@ -47,5 +47,13 @@ public class TcpServer {
             System.out.println("error message: " + e.getMessage());
         }
     }
+    
+    private void createUser(String name, String password){
+        new User(name, password);
+    }
+    
+    private void createTask(){
+        
+    }
 
 }
