@@ -20,28 +20,22 @@ public class TaskManagerTCPClient {
      */
     public static void main(String[] args) {
         try {
-            InetAddress serverAddress = InetAddress.getByName("localhost");
-            int serverPort = 7896;
-            
-            Socket socket = new Socket(serverAddress, serverPort);
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             String[][] u = new String[][]{{"Alexander Kirk","goblin123"},
                 {"Mikkel Stolborg","demon123"},{"Niklas Madsen","orc123"}};
-            for(String[] a : u){
-                boolean serverState = checkServer(socket);
-                if (serverState == false) 
-                    { throw new IOException("No server response"); }
-                String request = new String("NewUser,"+a[0]+","+a[1]);
-                
-                dos.writeUTF(request);
-                
-                dos.flush();
-            }
+            InetAddress serverAddress = InetAddress.getByName("localhost");
+            int serverPort = 7896;
 
-            
-            
+            Socket socket = new Socket(serverAddress, serverPort);
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+
+            boolean serverState = checkServer(socket);
+            if (serverState == false) 
+                { throw new IOException("No server response"); }
             //Create users:
-            
+            for(String[] a : u){
+                UserRequestServer(socket, a);
+            }
             socket.close();
             
         } catch (Exception e) {
@@ -67,6 +61,31 @@ public class TaskManagerTCPClient {
         
         if (response.equals("Ready")) { return true; }
         else { return false; }
+    }
+    
+    private static void UserRequestServer(Socket socket, String[] user) throws IOException {
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        
+        String message = "Hello Server!";
+        
+        dos.writeUTF(message);
+        dos.flush();
+        
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+        
+        String response = dis.readUTF();
+        
+        System.out.println("Message from Server: " + response);
+        
+        if (response.equals("Ready")) {
+            message = "NewUser,"+user[0]+","+user[1];
+            dos.writeUTF(message);
+            dos.flush();
+            response = dis.readUTF();
+        
+            System.out.println("Message from Server: " + response);
+        }
+        else { System.out.println("No response from server");}
     }
 
 }

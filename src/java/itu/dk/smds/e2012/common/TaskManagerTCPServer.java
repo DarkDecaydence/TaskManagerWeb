@@ -41,12 +41,10 @@ public class TaskManagerTCPServer {
                 if (message.equals("Hello Server!")) {
                     outputStream.writeUTF("Ready");
                     outputStream.flush();
-                }
-                else {
+                } else {
                     String[] newMessage = message.split(",");
                     if (newMessage[0].equals("NewUser")) {
                         createUser(newMessage[1],newMessage[2]);
-                        
                         outputStream.writeUTF("New User Created");
                         outputStream.flush();
                     } else if (newMessage[0].equals("NewTask")) {
