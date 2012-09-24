@@ -8,6 +8,8 @@ import javax.xml.bind.JAXBException;
 
 /**
  * Class responsible for serialization of the cal class, creating an xml file.
+ *
+ * @author GIGAR
  */
 
 public class CalSerializer {
