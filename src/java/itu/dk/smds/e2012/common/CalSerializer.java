@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 /**
- *
+ * This is a git test
  * @author GIGAR
  */
 
