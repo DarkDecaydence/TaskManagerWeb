@@ -1,13 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package itu.dk.smds.e2012.common;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 import java.io.*;
 import java.util.ListIterator;
 import java.util.logging.Level;
@@ -25,23 +16,23 @@ public class CalSerializer {
     public static void main(String args[]) throws IOException {
         try {
 
-            // assign path to the task-manager-xml Xml, 
+            // assign path to the cal Xml, 
             String path = System.getProperty("user.dir") + "/web/WEB-INF/task-manager-xml.xml";
 
             // create an instance context class, to serialize/deserialize.
             JAXBContext jaxbContext = JAXBContext.newInstance(Cal.class);
 
-            // Create a file input stream for the university Xml.
+            // Create a file input stream for the cal Xml.
             FileInputStream stream = new FileInputStream(path);
 
-            // deserialize university xml into java objects.
+            // deserialize cal xml into java objects.
             Cal cal = (Cal) jaxbContext.createUnmarshaller().unmarshal(stream);
 
 
-            // Iterate through the collection of student object and print each student object in the form of Xml to console.
+            // Iterate through the collection of object and print each object in the form of Xml to console.
             ListIterator<User> listIterator = cal.users.listIterator();
             
-            System.out.println("Printing student objects serailized into Xml");
+            System.out.println("Printing user objects serailized into Xml");
             
             
             while (listIterator.hasNext()) {
@@ -49,7 +40,7 @@ public class CalSerializer {
                 PrintUserObject(listIterator.next());
 
             }
-            //same as above
+            //same as above, but with tasks
             ListIterator<Task> listIterator2 = cal.tasks.listIterator();
             while (listIterator2.hasNext()) {
 
@@ -58,16 +49,52 @@ public class CalSerializer {
             }
             
 
-            // Serialize university object into xml.
+            // Serialize cal object into xml.
             
             StringWriter writer = new StringWriter();
 
             // We can use the same context object, as it knows how to 
-            //serialize or deserialize University class.
+            //serialize or deserialize Cal class.
             jaxbContext.createMarshaller().marshal(cal, writer);
 
             
-            System.out.println("Printing serialized university Xml before saving into file!");
+            System.out.println("Printing serialized cal Xml before saving into file!");
+            
+            // Print the serialized Xml to Console.
+            System.out.println(writer.toString());
+            
+            
+            // Finally save the Xml back to the file.
+            SaveFile(writer.toString(), path);
+
+
+
+        } catch (JAXBException ex) {
+            Logger.getLogger(CalSerializer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static void makeXmlFile(Cal cal) throws IOException{
+        try {
+
+            // assign path to the Xml, 
+            String path = System.getProperty("user.dir") + "/web/WEB-INF/task-manager-xml.xml";
+
+            // create an instance context class, to serialize/deserialize.
+            JAXBContext jaxbContext = JAXBContext.newInstance(Cal.class);
+
+          
+            // Serialize cal object into xml.
+            
+            StringWriter writer = new StringWriter();
+
+            // We can use the same context object, as it knows how to 
+            //serialize or deserialize Cal class.
+            jaxbContext.createMarshaller().marshal(cal, writer);
+
+            
+            System.out.println("Printing serialized cal Xml before saving into file!");
             
             // Print the serialized Xml to Console.
             System.out.println(writer.toString());
@@ -90,10 +117,10 @@ public class CalSerializer {
             
             StringWriter writer = new StringWriter();
 
-            // create a context object for Student Class
+            // create a context object for User Class
             JAXBContext jaxbContext = JAXBContext.newInstance(User.class);
 
-            // Call marshal method to serialize student object into Xml
+            // Call marshal method to serialize User object into Xml
             jaxbContext.createMarshaller().marshal(user, writer);
 
             System.out.println(writer.toString());
@@ -110,10 +137,10 @@ public class CalSerializer {
             
             StringWriter writer = new StringWriter();
 
-            // create a context object for Student Class
+            // create a context object for Task Class
             JAXBContext jaxbContext = JAXBContext.newInstance(Task.class);
 
-            // Call marshal method to serialize student object into Xml
+            // Call marshal method to serialize Task object into Xml
             jaxbContext.createMarshaller().marshal(task, writer);
 
             System.out.println(writer.toString());
@@ -135,8 +162,5 @@ public class CalSerializer {
         output.write(xml);
 
         output.close();
-
-
-
     }
 }
