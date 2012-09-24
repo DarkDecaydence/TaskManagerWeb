@@ -21,7 +21,7 @@ public class TaskManagerTCPClient {
     public static void main(String[] args) {
         try {
             String[][] u = new String[][]{{"Alexander Kirk","goblin123"},
-                {"Mikkel Stolborg","demon123"},{"Niklas Madsen","orc123"}};
+                {"Mikkel Stolborg","demon123"},{"Niklas Madsen","orc123"},{"Morten Dresdner","devil123"}};
             InetAddress serverAddress = InetAddress.getByName("localhost");
             int serverPort = 7896;
 
@@ -36,8 +36,13 @@ public class TaskManagerTCPClient {
             for(String[] a : u){
                 UserRequestServer(socket, a);
             }
-            socket.close();
+            //Create Task
+            TaskRequestServer(socket,"0001" , "Do MDS Mandatory Exercise 1","18-09-2012",
+                    "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
             
+            dos.writeUTF("close");
+            dos.flush();
+            socket.close();
         } catch (Exception e) {
             Logger.getLogger(TaskManagerTCPClient.class.getName()).log(Level.SEVERE, null, e);
             
@@ -81,6 +86,33 @@ public class TaskManagerTCPClient {
             message = "NewUser,"+user[0]+","+user[1];
             dos.writeUTF(message);
             dos.flush();
+            response = dis.readUTF();
+        
+            System.out.println("Message from Server: " + response);
+        }
+        else { System.out.println("No response from server");}
+    }
+    
+    private static void TaskRequestServer(Socket socket, String id, String name,
+            String date, String status, String description, String attendant) throws IOException {
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        
+        String message = "Hello Server!";
+        
+        dos.writeUTF(message);
+        dos.flush();
+        
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+        
+        String response = dis.readUTF();
+        
+        System.out.println("Message from Server: " + response);
+        
+        if (response.equals("Ready")) {
+            message = "NewTask,"+id+","+name+","+date+","+status+","+description+
+                    ","+attendant;
+            dos.writeUTF(message);
+            dos.flush(); 
             response = dis.readUTF();
         
             System.out.println("Message from Server: " + response);

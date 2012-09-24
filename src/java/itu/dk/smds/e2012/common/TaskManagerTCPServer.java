@@ -14,7 +14,8 @@ import java.util.logging.Logger;
  * @author Alexander
  */
 public class TaskManagerTCPServer {
-
+    private static Socket socket;
+    private static DataInputStream dis;
     private static Cal cal = new Cal();
     /**
      * @param args the command line arguments
@@ -27,13 +28,18 @@ public class TaskManagerTCPServer {
                 ServerSocket serverSocket = new ServerSocket(serverPort);
                 System.out.println("Server started at port: " + serverPort);
 
-                Socket socket = serverSocket.accept();
+                socket = serverSocket.accept();
 
                 InputStream is = socket.getInputStream();
-                DataInputStream dis = new DataInputStream(is);
+                dis = new DataInputStream(is);
 
                 while (true) {
-                String message = dis.readUTF();
+                String message = "";
+                try{
+                    message = dis.readUTF();
+                } catch (IOException e){
+                    resetServer(serverSocket);
+                }
                 
                 System.out.println("Message from Client: " + message);
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
@@ -41,6 +47,8 @@ public class TaskManagerTCPServer {
                 if (message.equals("Hello Server!")) {
                     outputStream.writeUTF("Ready");
                     outputStream.flush();
+                } else if(message.equals("close")){
+                    resetServer(serverSocket);
                 } else {
                     String[] newMessage = message.split(",");
                     if (newMessage[0].equals("NewUser")) {
@@ -53,7 +61,7 @@ public class TaskManagerTCPServer {
                         
                         outputStream.writeUTF("New Task Created");
                         outputStream.flush();
-                    }
+                    } 
                 }
                 //socket.close();
             }
@@ -71,5 +79,17 @@ public class TaskManagerTCPServer {
     private static void createTask(String id, String name, String date, String status,
             String description, String attendant){
         cal.addTask(new Task(id, name, date, status, description, attendant));
+    }
+    private static void resetServer(ServerSocket serverSocket){
+        try{
+            socket.close();
+            socket = serverSocket.accept();
+            InputStream is = socket.getInputStream();
+            dis = new DataInputStream(is);
+        } catch (IOException e) {
+            
+        }
+        
+        
     }
 }
