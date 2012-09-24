@@ -40,6 +40,8 @@ public class TaskManagerTCPClient {
             TaskRequestServer(socket,"0001" , "Do MDS Mandatory Exercise 1","18-09-2012",
                     "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
             
+            //Print file
+            PrintTaskServerRequest(socket);
             dos.writeUTF("close");
             dos.flush();
             socket.close();
@@ -111,6 +113,31 @@ public class TaskManagerTCPClient {
         if (response.equals("Ready")) {
             message = "NewTask,"+id+","+name+","+date+","+status+","+description+
                     ","+attendant;
+            dos.writeUTF(message);
+            dos.flush(); 
+            response = dis.readUTF();
+        
+            System.out.println("Message from Server: " + response);
+        }
+        else { System.out.println("No response from server");}
+    }
+    
+    private static void PrintTaskServerRequest(Socket socket) throws IOException {
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        
+        String message = "Hello Server!";
+        
+        dos.writeUTF(message);
+        dos.flush();
+        
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+        
+        String response = dis.readUTF();
+        
+        System.out.println("Message from Server: " + response);
+        
+        if (response.equals("Ready")) {
+            message = "PrintTask";
             dos.writeUTF(message);
             dos.flush(); 
             response = dis.readUTF();

@@ -61,7 +61,11 @@ public class TaskManagerTCPServer {
                         
                         outputStream.writeUTF("New Task Created");
                         outputStream.flush();
-                    } 
+                    } else if (newMessage[0].equals("PrintTask")){
+                        calToXml();
+                        outputStream.writeUTF("Task List Printed");
+                        outputStream.flush();
+                    }
                 }
                 //socket.close();
             }
@@ -90,6 +94,14 @@ public class TaskManagerTCPServer {
             
         }
         
+        
+    }
+    private static void calToXml(){
+        try{
+            CalSerializer.makeXmlFile(cal);
+        } catch(IOException e) {
+            System.out.println("No file printed");
+        }
         
     }
 }
