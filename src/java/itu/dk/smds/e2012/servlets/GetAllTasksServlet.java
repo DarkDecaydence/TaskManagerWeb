@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package itu.dk.smds.e2012.servlets;
 
 import itu.dk.smds.e2012.common.TasksJDOMParser;
@@ -38,8 +34,6 @@ public class GetAllTasksServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-
-
             InputStream xmlStream = getServletContext().getResourceAsStream("/WEB-INF/task-manager-xml.xml");
 
             String query = "//task";
@@ -51,18 +45,10 @@ public class GetAllTasksServlet extends HttpServlet {
 
             PrintWriter out = response.getWriter();
 
-
             new XMLOutputter().output(tasksDoc, out);
-
-
-
         } catch (JDOMException ex) {
             Logger.getLogger(GetAllTasksServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package itu.dk.smds.e2012.common;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 /**
- *
- * @author GIGAR
+ * Class responsible for tasks
  */
 @XmlRootElement(name = "task")
 public class Task {
@@ -22,8 +17,19 @@ public class Task {
     
     public String description;
     public String attendant;
-    
+    /**
+     * Constructor for serialization purpose
+     */
     public Task(){}
+    /**
+     * Constructor for creating a task
+     * @param id, id of the task
+     * @param name, name of the task
+     * @param date, the date of the task
+     * @param status, the status of the task
+     * @param description, the task description
+     * @param attendant, the attendants of the task 
+     */
     public Task(String id, String name, String date, String status,
             String description, String attendant){
         this.id = id;

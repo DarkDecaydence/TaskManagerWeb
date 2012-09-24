@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package itu.dk.smds.e2012.common;
 
 import java.io.IOException;
@@ -25,9 +21,6 @@ import org.jdom2.xpath.XPathFactory;
 public class TasksJDOMParser {
 
         public static Document GetTasksByQuery(InputStream stream, String query) throws JDOMException, IOException {
-
-
-
         SAXBuilder builder = new SAXBuilder();
 
         //String query = "//task[contains(attendant/@ids,'" + userId + "')]";
@@ -42,32 +35,21 @@ public class TasksJDOMParser {
             throw ex;
         }
 
-        
-
         XPathFactory xpfac = XPathFactory.instance();
 
         XPathExpression xp = xpfac.compile(query);
 
         List<Element> tasks = (List<Element>) xp.evaluate(doc);
-
         
         Document xmlDoc = new Document();
 
         Element root = new Element("tasks");
 
         for (int index = 0; index < tasks.size(); index++) {
-
             root.addContent(tasks.get(index).clone());
-
         }
-
-
-
-
-
+        
         xmlDoc.addContent(root);
-
-
         return xmlDoc;
     }
 }
