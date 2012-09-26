@@ -54,6 +54,22 @@ public class Cal {
     }
     
     /**
+     * 
+     * @param id the String of the task to be returned
+     * @return a Task object if found. Returns null otherwise.
+     */
+    public Task GET(String id){
+        for(int i = 0; i < tasks.size(); i++)
+        {
+            if(tasks.get(i).id == id)
+            {
+                return tasks.get(i);
+            }
+        }
+        return null;
+    }
+    
+    /**
      * Adds a new task to the task list.
      * @param t, the task to be added.
      */
@@ -85,6 +101,18 @@ public class Cal {
      */
     public void DELETE(Task t){
         tasks.remove(t);
+        writeToXml();
+    }
+    
+    public void DELETE(String id){
+        for(int i = 0; i < tasks.size(); i++)
+        {
+            if(tasks.get(i).id == id)
+            {
+                tasks.remove(i);
+                break;
+            }
+        }
         writeToXml();
     }
     
