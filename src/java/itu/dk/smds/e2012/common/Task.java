@@ -1,6 +1,7 @@
 package itu.dk.smds.e2012.common;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 /**
  * Class responsible for tasks
  */
