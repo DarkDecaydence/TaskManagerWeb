@@ -89,9 +89,6 @@ public class CalSerializer {
     public Cal getCal(){
         Cal returnCal = null;
         try {
-            // assign path to the university Xml, 
-        String path = System.getProperty("user.dir") + "/web/WEB-INF/task-manager-xml.xml";
-
         // create an instance context class, to serialize/deserialize.
         JAXBContext jaxbContext = JAXBContext.newInstance(Cal.class);
 
