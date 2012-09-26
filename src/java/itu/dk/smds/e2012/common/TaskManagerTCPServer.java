@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -32,6 +33,7 @@ public class TaskManagerTCPServer {
 
                 InputStream is = socket.getInputStream();
                 dis = new DataInputStream(is);
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
                 while (true) {
                 String message = "";
@@ -47,7 +49,7 @@ public class TaskManagerTCPServer {
                 
                 //Checks message from client
                 if( "POST".equals(message)){
-                    post(outputStream);
+                    post(outputStream, ois);
                 } else if("PUT".equals(message)){
                     put(outputStream);
                 } else if("GET".equals(message)){
@@ -91,16 +93,20 @@ public class TaskManagerTCPServer {
         }
     }
     
-    private static void post(DataOutputStream outputStream) throws IOException{
+    private static void post(DataOutputStream outputStream, ObjectInputStream ois) throws IOException{
         outputStream.writeUTF("POST");
         outputStream.flush();
         // Internal logic for creating a task
-        String message = dis.readUTF();
-        System.out.println("message from client test " + message);
-        
-        //response from logic
-        outputStream.writeUTF("Task created");
-        outputStream.flush();
+        try {
+            Task task = (Task) ois.readObject();
+            cal.POST(task);
+            outputStream.writeUTF("Task created");
+            outputStream.flush();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            outputStream.writeUTF("Task creation failed");
+            outputStream.flush();
+        }
     }
     
     private static void put(DataOutputStream outputStream) throws IOException{
