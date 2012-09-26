@@ -31,23 +31,20 @@ public class TaskManagerTCPClient {
             Socket socket = new Socket(serverAddress, serverPort);
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-//            boolean serverState = checkServer(socket);
-//            if (serverState == false) 
-//                { throw new IOException("No server response"); }
             //Create users:
 //            for(String[] a : u){
 //                UserRequestServer(socket, a);
 //            }
             //Using post, create a task:
             Task task = new Task("0001" , "Do MDS Mandatory Exercise 1","18-09-2012",
+                    "initialized","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
+            taskRequest(socket, task, "POST");
+            
+            //Change task by sending put request
+            Task taskput = new Task("0001", "Do MDS Mandatory Exercise 1","18-09-2012",
                     "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
-            postRequest(socket, task);
-            
-            
-            //Create Task
-            //TaskRequestServer(socket,"0001" , "Do MDS Mandatory Exercise 1","18-09-2012",
-//                    "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
-            
+            taskRequest(socket, taskput,"PUT");
+             
             //Print file
             //PrintTaskServerRequest(socket);
             dos.writeUTF("close");
@@ -129,34 +126,6 @@ public class TaskManagerTCPClient {
      * @param attendant, the attendants of the task
      * @throws IOException 
      */
-    private static void TaskRequestServer(Socket socket, String id, String name,
-            String date, String status, String description, String attendant) throws IOException {
-        // creates data stream.
-        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        
-        String message = "Hello Server!";
-        
-        dos.writeUTF(message);
-        dos.flush();
-        
-        DataInputStream dis = new DataInputStream(socket.getInputStream());
-        // gets server response
-        String response = dis.readUTF();
-        // prints server response
-        System.out.println("Message from Server: " + response);
-        
-        //check response, and sends task request
-        if (response.equals("Ready")) {
-            message = "NewTask,"+id+","+name+","+date+","+status+","+description+
-                    ","+attendant;
-            dos.writeUTF(message);
-            dos.flush(); 
-            response = dis.readUTF();
-            //prints response from task creation
-            System.out.println("Message from Server: " + response);
-        }
-        else { System.out.println("No response from server");}
-    }
     /**
      * Method for requesting xml file
      * @param socket, server socket
@@ -188,11 +157,9 @@ public class TaskManagerTCPClient {
         else { System.out.println("No response from server");}
     }
     
-    private static void postRequest(Socket socket, Task task) throws IOException {
+    private static void taskRequest(Socket socket, Task task,String message) throws IOException {
         // creates data stream.
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        
-        String message = "POST";
         
         dos.writeUTF(message);
         dos.flush();
@@ -206,6 +173,12 @@ public class TaskManagerTCPClient {
         
         //check response, and sends task request
         if (response.equals("POST")) {
+            oos.writeObject(task);
+            oos.flush(); 
+            response = dis.readUTF();
+            //prints response from task creation
+            System.out.println("Message from Server: " + response);
+        } else if( response.equals("PUT")) {
             oos.writeObject(task);
             oos.flush(); 
             response = dis.readUTF();
