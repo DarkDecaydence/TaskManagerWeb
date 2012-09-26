@@ -12,11 +12,11 @@ import java.io.Serializable;
 public class Cal {
     @XmlElementWrapper(name = "users")
     @XmlElement(name = "user")
-    public List<User> users;
+    public ArrayList<User> users;
     
     @XmlElementWrapper(name = "tasks")
     @XmlElement(name = "task")
-    public List<Task> tasks;
+    public ArrayList<Task> tasks;
     
     /**
      * Constructor creating the lists of users and tasks.
@@ -44,7 +44,7 @@ public class Cal {
     /**
      * @return A list of the tasks in the current Cal object
      */
-    public List<Task> GET(){
+    public ArrayList<Task> GET(){
         return tasks;
     }
     
