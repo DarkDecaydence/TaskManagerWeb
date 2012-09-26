@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.io.*;
 /**
  * The class responsible for the task manager data
  */
@@ -18,12 +21,14 @@ public class Cal {
     @XmlElement(name = "task")
     public ArrayList<Task> tasks;
     
+    static Cal currentCal;
+    
     /**
      * Constructor creating the lists of users and tasks.
      */
-    public Cal(){
-        users = new ArrayList<User>();
-        tasks = new ArrayList<Task>();
+    private Cal(){
+        //users = new ArrayList<User>();
+        //tasks = new ArrayList<Task>();
     }
     
     /**

@@ -86,4 +86,22 @@ public class CalSerializer {
         POSTxml(t);
     }
     */
+    public Cal getCal(){
+        Cal returnCal = null;
+        try {
+            // assign path to the university Xml, 
+        String path = System.getProperty("user.dir") + "/web/WEB-INF/task-manager-xml.xml";
+
+        // create an instance context class, to serialize/deserialize.
+        JAXBContext jaxbContext = JAXBContext.newInstance(Cal.class);
+
+        // Create a file input stream for the university Xml.
+        FileInputStream stream = new FileInputStream(path);
+
+        // deserialize university xml into java objects.
+         returnCal = (Cal) jaxbContext.createUnmarshaller().unmarshal(stream);
+        }
+        catch (Exception e) { System.out.println("Coud not properly initialize: " + e); }
+        return returnCal;
+    }
 }
