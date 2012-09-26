@@ -33,7 +33,6 @@ public class TaskManagerTCPServer {
 
                 InputStream is = socket.getInputStream();
                 dis = new DataInputStream(is);
-                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
                 while (true) {
                 String message = "";
@@ -49,7 +48,7 @@ public class TaskManagerTCPServer {
                 
                 //Checks message from client
                 if( "POST".equals(message)){
-                    post(outputStream, ois);
+                    post(outputStream);
                 } else if("PUT".equals(message)){
                     put(outputStream);
                 } else if("GET".equals(message)){
@@ -74,13 +73,7 @@ public class TaskManagerTCPServer {
                         createUser(newMessage[1],newMessage[2]);
                         outputStream.writeUTF("New User Created");
                         outputStream.flush();
-                    } else if (newMessage[0].equals("NewTask")) {
-                        createTask(newMessage[1],newMessage[2],newMessage[3],newMessage[4],
-                                newMessage[5],newMessage[6]);
-                        
-                        outputStream.writeUTF("New Task Created");
-                        outputStream.flush();
-                    } else if (newMessage[0].equals("PrintTask")){
+                    }  else if (newMessage[0].equals("PrintTask")){
                         calToXml();
                         outputStream.writeUTF("Task List Printed");
                         outputStream.flush();
@@ -93,11 +86,12 @@ public class TaskManagerTCPServer {
         }
     }
     
-    private static void post(DataOutputStream outputStream, ObjectInputStream ois) throws IOException{
+    private static void post(DataOutputStream outputStream) throws IOException{
         outputStream.writeUTF("POST");
         outputStream.flush();
         // Internal logic for creating a task
         try {
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             Task task = (Task) ois.readObject();
             cal.POST(task);
             outputStream.writeUTF("Task created");
@@ -127,19 +121,6 @@ public class TaskManagerTCPServer {
      */
     private static void createUser(String name, String password){
         cal.addUser(new User(name, password));
-    }
-    /**
-     * Creates a task object
-     * @param id, the id of the task
-     * @param name, the name of the task
-     * @param date, the date of the task
-     * @param status, the task status
-     * @param description, the description of the task
-     * @param attendant, the task attendants 
-     */
-    private static void createTask(String id, String name, String date, String status,
-            String description, String attendant){
-        cal.addTask(new Task(id, name, date, status, description, attendant));
     }
     /**
      * Method for resetting server

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Class responsible for tasks
  */
 @XmlRootElement(name = "task")
-public class Task {
+public class Task implements Serializable {
     @XmlAttribute(name = "id")
     public String id;
     @XmlAttribute(name = "name")
