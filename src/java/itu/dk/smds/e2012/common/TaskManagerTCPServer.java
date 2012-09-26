@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  * Class handling the server
@@ -45,6 +46,21 @@ public class TaskManagerTCPServer {
                 DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
                 
                 //Checks message from client
+                if( "POST".equals(message)){
+                    post(outputStream);
+                } else if("PUT".equals(message)){
+                    put(outputStream);
+                } else if("GET".equals(message)){
+                    get(outputStream);
+                } else if("DELETE".equals(message)){
+                    delete(outputStream);
+                } else if("close".equals(message)){
+                    resetServer(serverSocket);
+                } else {
+                    outputStream.writeUTF("Not a known command");
+                    outputStream.flush();
+                } 
+                
                 if (message.equals("Hello Server!")) {
                     outputStream.writeUTF("Ready");
                     outputStream.flush();
@@ -75,6 +91,29 @@ public class TaskManagerTCPServer {
         }
     }
     
+    private static void post(DataOutputStream outputStream) throws IOException{
+        outputStream.writeUTF("POST");
+        outputStream.flush();
+        // Internal logic for creating a task
+        String message = dis.readUTF();
+        System.out.println("message from client test " + message);
+        
+        //response from logic
+        outputStream.writeUTF("Task created");
+        outputStream.flush();
+    }
+    
+    private static void put(DataOutputStream outputStream) throws IOException{
+        
+    }
+    
+    private static void get(DataOutputStream outputStream) throws IOException{
+        
+    }
+    
+    private static void delete(DataOutputStream outputStream) throws IOException{
+        
+    }
     /**
      * Creates an user object
      * @param name, the name of the user

@@ -30,19 +30,24 @@ public class TaskManagerTCPClient {
             Socket socket = new Socket(serverAddress, serverPort);
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-            boolean serverState = checkServer(socket);
-            if (serverState == false) 
-                { throw new IOException("No server response"); }
+//            boolean serverState = checkServer(socket);
+//            if (serverState == false) 
+//                { throw new IOException("No server response"); }
             //Create users:
-            for(String[] a : u){
-                UserRequestServer(socket, a);
-            }
+//            for(String[] a : u){
+//                UserRequestServer(socket, a);
+//            }
+            //Using post, create a task:
+            Task task = new Task();
+            postRequest(socket, task);
+            
+            
             //Create Task
-            TaskRequestServer(socket,"0001" , "Do MDS Mandatory Exercise 1","18-09-2012",
-                    "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
+            //TaskRequestServer(socket,"0001" , "Do MDS Mandatory Exercise 1","18-09-2012",
+//                    "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
             
             //Print file
-            PrintTaskServerRequest(socket);
+            //PrintTaskServerRequest(socket);
             dos.writeUTF("close");
             dos.flush();
             socket.close();
@@ -176,6 +181,35 @@ public class TaskManagerTCPClient {
             dos.flush(); 
             response = dis.readUTF();
             //prints response from print request
+            System.out.println("Message from Server: " + response);
+        }
+        else { System.out.println("No response from server");}
+    }
+    
+    private static void postRequest(Socket socket, Task task) throws IOException {
+        // creates data stream.
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        
+        String message = "POST";
+        
+        dos.writeUTF(message);
+        dos.flush();
+        
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+        // gets server response
+        String response = dis.readUTF();
+        // prints server response
+        System.out.println("Message from Server: " + response);
+        
+        //check response, and sends task request
+        if (response.equals("POST")) {
+            message = "Task object";
+            
+//            dos.writeUTF();
+            dos.writeUTF(message);
+            dos.flush(); 
+            response = dis.readUTF();
+            //prints response from task creation
             System.out.println("Message from Server: " + response);
         }
         else { System.out.println("No response from server");}
