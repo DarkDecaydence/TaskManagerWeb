@@ -40,4 +40,58 @@ public class Cal {
     public void addTask(Task t){
         tasks.add(t);
     }
+    
+    /**
+     * @return A list of the tasks in the current Cal object
+     */
+    public List<Task> GET(){
+        return tasks;
+    }
+    
+    /**
+     * Adds a new task to the task list.
+     * @param t, the task to be added.
+     */
+    public void POST(Task t){
+        addTask(t); //In case we ever change anything
+        writeToXml();
+    }
+    
+    /**
+     * Updates the task with the specific id given.
+     * @param t, the task to be changed.
+     */
+    public void PUT(Task t){
+        for(int i = 0; i < tasks.size(); i++)
+        {
+            if(tasks.get(i).id == t.id)
+            {
+                tasks.remove(i);
+                tasks.add(t);
+                break;
+            }
+        }
+        writeToXml();
+    }
+    
+    /**
+     * Deletes the specific task.
+     * @param t, the task to be deleted.
+     */
+    public void DELETE(Task t){
+        tasks.remove(t);
+        writeToXml();
+    }
+    
+    /**
+     * Writes the current Cal objekt to the XML file.
+     */
+    private void writeToXml() {
+        try {
+            CalSerializer.makeXmlFile(this);
+        }
+        catch (Exception e) {
+            System.out.println("Error - Could not write to XML: " + e);
+        }
+    }
 }

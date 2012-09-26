@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.*;
 
 /**
  * Class responsible for serialization of the cal class, creating an xml file.
@@ -13,6 +14,9 @@ import javax.xml.bind.JAXBException;
  */
 
 public class CalSerializer {
+    // assign path to the Xml, 
+    static String path = System.getProperty("user.dir") + "/web/WEB-INF/task-manager-xml.xml";
+    
     /**
      * Method responsible for converting a cal object to an xml document.
      * @param cal, the object to be serialized
@@ -20,9 +24,6 @@ public class CalSerializer {
      */
     public static void makeXmlFile(Cal cal) throws IOException{
         try {
-            // assign path to the Xml, 
-            String path = System.getProperty("user.dir") + "/web/WEB-INF/task-manager-xml.xml";
-
             // create an instance context class, to serialize/deserialize.
             JAXBContext jaxbContext = JAXBContext.newInstance(Cal.class);
 
@@ -61,4 +62,28 @@ public class CalSerializer {
         output.write(xml);
         output.close();
     }
+    /**
+     * Writes a Task object to the XML file.
+     * @param task, the object to be posted.
+     */
+    /*
+    public static void POSTxml(Task task) {
+        try {
+            JAXBContext jc = JAXBContext.newInstance(Task.class);
+            Marshaller m = jc.createMarshaller();
+            
+            m.marshal(task, System.out);
+            
+        }
+        catch (JAXBException ex) {
+            Logger.getLogger(CalSerializer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void main(String[] args) {
+        Task t = new Task("idSomething", "nameSomething", "dateSomething", "statusSomething",
+            "descriptionSomething", "attendantSomething");
+        POSTxml(t);
+    }
+    */
 }
