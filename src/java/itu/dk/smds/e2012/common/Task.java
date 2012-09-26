@@ -40,4 +40,11 @@ public class Task implements Serializable {
         this.description = description;
         this.attendant = attendant;
     }
+    
+    public String print(){
+        String task = "";
+        task +="Id: "+id +", Name: " + name + ", Date: "+ date +", Status: " + status +
+                ", Description: " + description + ", Attendant: " + attendant;        
+        return task;
+    }
 }

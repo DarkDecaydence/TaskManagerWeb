@@ -62,31 +62,8 @@ public class CalSerializer {
         output.write(xml);
         output.close();
     }
-    /**
-     * Writes a Task object to the XML file.
-     * @param task, the object to be posted.
-     */
-    /*
-    public static void POSTxml(Task task) {
-        try {
-            JAXBContext jc = JAXBContext.newInstance(Task.class);
-            Marshaller m = jc.createMarshaller();
-            
-            m.marshal(task, System.out);
-            
-        }
-        catch (JAXBException ex) {
-            Logger.getLogger(CalSerializer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
-    public static void main(String[] args) {
-        Task t = new Task("idSomething", "nameSomething", "dateSomething", "statusSomething",
-            "descriptionSomething", "attendantSomething");
-        POSTxml(t);
-    }
-    */
-    public Cal getCal(){
+    public static Cal getCal(){
         Cal returnCal = null;
         try {
         // create an instance context class, to serialize/deserialize.
