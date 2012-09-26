@@ -3,6 +3,7 @@ package itu.dk.smds.e2012.common;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -38,7 +39,8 @@ public class TaskManagerTCPClient {
 //                UserRequestServer(socket, a);
 //            }
             //Using post, create a task:
-            Task task = new Task();
+            Task task = new Task("0001" , "Do MDS Mandatory Exercise 1","18-09-2012",
+                    "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
             postRequest(socket, task);
             
             
@@ -196,6 +198,7 @@ public class TaskManagerTCPClient {
         dos.flush();
         
         DataInputStream dis = new DataInputStream(socket.getInputStream());
+        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
         // gets server response
         String response = dis.readUTF();
         // prints server response
@@ -203,11 +206,8 @@ public class TaskManagerTCPClient {
         
         //check response, and sends task request
         if (response.equals("POST")) {
-            message = "Task object";
-            
-//            dos.writeUTF();
-            dos.writeUTF(message);
-            dos.flush(); 
+            oos.writeObject(task);
+            oos.flush(); 
             response = dis.readUTF();
             //prints response from task creation
             System.out.println("Message from Server: " + response);
