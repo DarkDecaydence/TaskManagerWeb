@@ -5,8 +5,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -121,21 +123,23 @@ public class TaskManagerTCPServer {
         outputStream.writeUTF("GET");
         outputStream.flush();
         // Internal logic for creating a task
-        try {
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            Task task = (Task) ois.readObject();
-            cal.GET();
-            outputStream.writeUTF("Task modified");
-            outputStream.flush();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, ex);
-            outputStream.writeUTF("Task modification failed");
-            outputStream.flush();
-        }
+        String id = dis.readUTF();
+        List<Task> list = cal.GET();
+        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+        oos.writeObject(list);
+        oos.flush();
     }
     
     private static void delete(DataOutputStream outputStream) throws IOException{
+        outputStream.writeUTF("DELETE");
+        outputStream.flush();
         
+        // Internal logic for creating a task
+        String id = dis.readUTF();
+        cal.DELETE(id);
+        
+        outputStream.writeUTF("Task Deleted");
+        outputStream.flush();
     }
     /**
      * Creates an user object
