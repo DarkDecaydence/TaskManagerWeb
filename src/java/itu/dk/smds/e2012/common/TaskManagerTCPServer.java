@@ -20,6 +20,7 @@ public class TaskManagerTCPServer {
     private static Socket socket;
     private static DataInputStream dis;
     private static Cal cal = CalSerializer.getCal();
+    private static RestClient restClient = new RestClient();
     
     /**
      * Main method for initializing the server
@@ -174,8 +175,59 @@ public class TaskManagerTCPServer {
         }
     }
     
-    public static String GetAllTasks() {
-        
-        return null;
+    public static String GetAttendantTasks(String attendantId, int serviceOption) {
+        String url = "http://trustcare.itu.dk/task-manager-rest/tasks/attendant/";
+        String returnString = "";
+        switch (serviceOption) {
+            case 1:     //Call SOAP function.
+                        break;
+                
+            case 2:     returnString = restClient.DoRestCall(url+attendantId,"GET", null);
+                        break;
+            
+            case 3:     //Call SOAP function
+                        returnString = restClient.DoRestCall(url+attendantId,"GET", null); 
+                        break;
+            
+            default:    System.out.println("Please specify a service option");
+                        break;
+        }
+        return returnString;
+    }
+    
+    public static void CreateTask(String taskXml, int serviceOption) {
+        String url = "http://trustcare.itu.dk/task-manager-rest/tasks/createtask";
+        switch (serviceOption) {
+            case 1:     //Call SOAP function
+                        break;
+            
+            case 2:     restClient.DoRestCall(url, "POST", taskXml);
+                        break;
+            
+            case 3:     //Call SOAP function
+                        restClient.DoRestCall(url, "Post", taskXml);
+                        break;
+            
+            default:    System.out.println("Please specify a service option");
+                        break;
+        }
+    }
+    
+    public static void DeleteTask(String taskId, int serviceOption) {
+        String url = "http://trustcare.itu.dk/task-manager-rest/tasks/DeleteTask?taskId=";
+        switch (serviceOption) {
+            case 1:     //Call SOAP function
+                        break;
+            
+            case 2:     restClient.DoRestCall(url+taskId, "DELETE", null);
+                        break;
+                
+            case 3:     //Call SOAP function
+                        restClient.DoRestCall(url+taskId, "DELETE", null);
+                        break;
+            
+            default:    System.out.println("Please specify a service option");
+                        break;
+        }
     }
 }
