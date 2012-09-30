@@ -173,4 +173,9 @@ public class TaskManagerTCPServer {
             System.out.println("No file printed");
         }
     }
+    
+    public static String GetAllTasks() {
+        
+        return null;
+    }
 }
