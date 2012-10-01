@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://trustcare.itu.dk/task-manager-soap/TaskManagerService.svc?wsdl" uri="wsdl/trustcare.itu.dk/task-manager-soap/TaskManagerService.svc.wsdl"/>
+    <system systemId="http://trustcare.itu.dk/task-manager-soap/TaskManagerService.svc?wsdl=wsdl0" uri="wsdl/trustcare.itu.dk/task-manager-soap/TaskManagerService.svc.wsdl_wsdl0.wsdl"/>
+    <system systemId="http://trustcare.itu.dk/task-manager-soap/TaskManagerService.svc?xsd=xsd0" uri="wsdl/trustcare.itu.dk/task-manager-soap/TaskManagerService.svc.xsd_xsd0.xsd"/>
+    <system systemId="http://trustcare.itu.dk/task-manager-soap/TaskManagerService.svc?xsd=xsd1" uri="wsdl/trustcare.itu.dk/task-manager-soap/TaskManagerService.svc.xsd_xsd1.xsd"/>
+    <system systemId="file:/C:/Users/Alexander/Documents/NetBeansProjects/TaskManagerWeb-01/src/conf/xml-resources/web-services/SoapClient/wsdl/trustcare.itu.dk/task-manager-soap/TaskManagerService.svc.wsdl" uri="wsdl/TaskManagerService.svc.wsdl"/>
+</catalog>
