@@ -59,6 +59,12 @@ public class TaskManagerTCPServer {
                     get(outputStream);
                 } else if("DELETE".equals(message)){
                     delete(outputStream);
+                } else if("GetAttendantTasks".equals(message)){
+                    attendantTasks(outputStream);
+                } else if("CreateTask".equals(message)){
+                    createTaskSoapRest(outputStream);
+                } else if("DeleteTask".equals(message)){
+                    deleteTaskSoapRest(outputStream);
                 } else if("close".equals(message)){
                     resetServer(serverSocket);
                 } else {
@@ -129,6 +135,65 @@ public class TaskManagerTCPServer {
         outputStream.writeUTF("Task Deleted");
         outputStream.flush();
     }
+    
+    private static void attendantTasks(DataOutputStream outputStream) throws IOException{
+        outputStream.writeUTF("GetAttendantTasks");
+        outputStream.flush();
+        // Internal logic for creating a task
+        try {
+            String[] info = dis.readUTF().split(",");
+            String attendantTasks = GetAttendantTasks(info[0], Integer.parseInt(info[1]));
+            outputStream.writeUTF(attendantTasks);
+            outputStream.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            outputStream.writeUTF("Get Attendant Tasks failed");
+            outputStream.flush();
+        }
+    }
+    
+    private static void createTaskSoapRest(DataOutputStream outputStream) throws IOException {
+        outputStream.writeUTF("CreateTask");
+        outputStream.flush();
+        try {
+            int serviceOption = Integer.parseInt(dis.readUTF());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            Task task = (Task) ois.readObject();
+            CreateTask(CalSerializer.TaskToXmlString(task), serviceOption);
+            
+            outputStream.writeUTF("Created Task");
+            outputStream.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            outputStream.writeUTF("Create Task failed");
+            outputStream.flush();
+        } catch (Exception ex) {
+            Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            outputStream.writeUTF("Failed to create task, XML error");
+            outputStream.flush();
+        }
+    }
+    
+    private static void deleteTaskSoapRest(DataOutputStream outputStream) throws IOException {
+        outputStream.writeUTF("DeleteTask");
+        outputStream.flush();
+        dis = new DataInputStream(socket.getInputStream());
+        
+        try {
+            String infom = dis.readUTF();
+            String[] info = infom.split(",");
+            
+            System.out.println("Info " + infom);
+            DeleteTask(info[0], Integer.parseInt(info[1]));
+            outputStream.writeUTF("Deleted Task");
+            outputStream.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, ex);
+            outputStream.writeUTF("Delete Task failed");
+            outputStream.flush();
+        }
+    }
+    
     /**
      * Creates an user object
      * @param name, the name of the user

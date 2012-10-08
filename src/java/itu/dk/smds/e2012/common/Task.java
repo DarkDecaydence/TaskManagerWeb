@@ -17,7 +17,7 @@ public class Task implements Serializable {
     public String status;
     
     public String description;
-    public String attendant;
+    public String attendantId;
     /**
      * Constructor for serialization purpose
      */
@@ -38,13 +38,13 @@ public class Task implements Serializable {
         this.date = date;
         this.status = status;
         this.description = description;
-        this.attendant = attendant;
+        this.attendantId = attendant;
     }
     
     public String print(){
         String task = "";
         task +="Id: "+id +", Name: " + name + ", Date: "+ date +", Status: " + status +
-                ", Description: " + description + ", Attendant: " + attendant;        
+                ", Description: " + description + ", Attendant: " + attendantId;        
         return task;
     }
 }

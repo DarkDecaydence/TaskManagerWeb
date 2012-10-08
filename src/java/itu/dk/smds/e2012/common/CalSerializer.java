@@ -78,4 +78,19 @@ public class CalSerializer {
         catch (Exception e) { System.out.println("Coud not properly initialize: " + e); }
         return returnCal;
     }
+    
+    public static String TaskToXmlString(Task task) throws Exception{
+        StringWriter writer = new StringWriter();
+        try {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Task.class);
+        
+
+        jaxbContext.createMarshaller().marshal(task, writer);
+        }
+        catch (Exception e) {
+            System.out.println("Error, could not create task:" + e);
+        }
+        return writer.toString();
+    }
+    
 }

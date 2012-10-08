@@ -47,7 +47,7 @@ public class TaskManagerTCPClient {
             
             //Change task by sending put request
             Task taskput = new Task("0001", "Do MDS Mandatory Exercise 1","18-09-2012",
-                    "done","Task Manager simple setup", "Mikkel; Alex; Niklas; Morten");
+                    "done","Task Manager simple setup", "Mikkel");
             taskRequest(socket, taskput,"PUT");
              
             //Get task list by id
@@ -58,11 +58,21 @@ public class TaskManagerTCPClient {
             String taskId = "0002";
             deleteRequest(socket, taskId);
             
+            String attendantId = "Mikkel";
+            getAttendantTasks(socket, attendantId, "3");
+            
+            Task newTask = new Task("0003", "Mess with your dog", "30-10-2012",
+                    "initialized","It is getting restless", "Mikkel; Alex; Niklas; Morten");
+            createTask(socket, newTask, "3");
+            
+            deleteTask(socket, "0003", "3");
+            
             //Print file
             //PrintTaskServerRequest(socket);
             dos.writeUTF("close");
             dos.flush();
             socket.close();
+            
         } catch (Exception e) {
             Logger.getLogger(TaskManagerTCPClient.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("error message: " + e.getMessage());
@@ -221,5 +231,69 @@ public class TaskManagerTCPClient {
             System.out.println("Message from Server: " + response);
         }
         else { System.out.println("No response from server");}
+    }
+    
+    private static void getAttendantTasks(Socket socket, String id, String serviceOption) throws IOException {
+        // creates ´data stream.
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        
+        dos.writeUTF("GetAttendantTasks");
+        dos.flush();
+        
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+        String response = dis.readUTF();
+        System.out.println("Message from Server: " + response);
+        
+        if (response.equals("GetAttendantTasks")) {
+            dos.writeUTF(id + "," + serviceOption);
+            dos.flush();
+            response = dis.readUTF();
+            System.out.println("Attendant tasks: " + response);
+        } else { System.out.println("No response from server"); }
+    }
+    
+    private static void createTask(Socket socket, Task task, String serviceOption) throws IOException {
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        
+        dos.writeUTF("CreateTask");
+        dos.flush();
+        
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+        String response = dis.readUTF();
+        System.out.println("Message from Server: " + response);
+        
+        if (response.equals("CreateTask")) {
+            dos.writeUTF(serviceOption);
+            
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject(task);
+            oos.flush();
+            
+            response = dis.readUTF();
+            System.out.println("Message from Server: " + response);
+        } else {
+            System.out.println("No response from server");
+        }
+    }
+    
+    private static void deleteTask(Socket socket, String id, String serviceOption) throws IOException {
+        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+        
+        dos.writeUTF("DeleteTask");
+        dos.flush();
+        
+        DataInputStream dis = new DataInputStream(socket.getInputStream());
+        String response = dis.readUTF();
+        System.out.println("Message from Server: " + response);
+
+        if (response.equals("DeleteTask")) {
+            dos.writeUTF(id + "," + serviceOption);
+            dos.flush();
+            
+            response = dis.readUTF();
+            System.out.println("Message from Server: " + response);
+        } else {
+            System.out.println("Wrong or no response from server: " + response);
+        }
     }
 }
