@@ -2,3 +2,4 @@
 *build-impl.xml
 *.jar
 /build/
+!/build/generated-sources/jax-ws/
