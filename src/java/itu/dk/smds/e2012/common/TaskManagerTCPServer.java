@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import org.jgroups.*;
 
 /**
  * Class handling the server
@@ -22,6 +22,7 @@ public class TaskManagerTCPServer {
     private static Cal cal = CalSerializer.getCal();
     private static RestClient restClient = new RestClient();
     private static SoapClient soapClient = new SoapClient();
+    private static JChannel channel;
     
     /**
      * Main method for initializing the server
@@ -31,7 +32,12 @@ public class TaskManagerTCPServer {
         try {
                 int serverPort = 7896;
                 ServerSocket serverSocket = new ServerSocket(serverPort);
+                channel = new JChannel();
+                channel.connect("TaskGroup");
+                
                 System.out.println("Server started at port: " + serverPort);
+                System.out.println("Channel (Name): " + channel.getName());
+                System.out.println("Channel (Address):" + channel.getAddressAsString());
 
                 socket = serverSocket.accept();
 
@@ -76,6 +82,7 @@ public class TaskManagerTCPServer {
         } catch (IOException e) {
             Logger.getLogger(TaskManagerTCPServer.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("error message: " + e.getMessage());
+        } catch (Exception ex) {
         }
     }
     
